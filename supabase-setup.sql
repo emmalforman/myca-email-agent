@@ -22,3 +22,4 @@ CREATE INDEX IF NOT EXISTS idx_gmail_tokens_user_email ON gmail_tokens(user_emai
 --   USING (auth.uid()::text = user_email);
 
 
+

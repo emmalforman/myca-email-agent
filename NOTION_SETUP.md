@@ -106,3 +106,4 @@ The integration will still work - it just won't populate those fields automatica
 If you use different names, update `lib/notion.ts` to match your property names.
 
 
+

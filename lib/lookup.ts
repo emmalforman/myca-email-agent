@@ -54,3 +54,4 @@ function parseSearchResults(items: any[], company: string): LookupResult[] {
 }
 
 
+
