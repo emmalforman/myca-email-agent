@@ -21,11 +21,16 @@ export async function getGmailClient(tokens: GmailTokens) {
       if (credentials.access_token && credentials.refresh_token) {
         // Update tokens in database
         // expiry_date can be Date or number (timestamp in ms)
-        const newExpiry = credentials.expiry_date 
-          ? (typeof credentials.expiry_date === 'number' 
-              ? credentials.expiry_date 
-              : credentials.expiry_date.getTime())
-          : Date.now() + 3600000;
+        let newExpiry: number;
+        if (credentials.expiry_date) {
+          if (typeof credentials.expiry_date === 'number') {
+            newExpiry = credentials.expiry_date;
+          } else {
+            newExpiry = credentials.expiry_date.getTime();
+          }
+        } else {
+          newExpiry = Date.now() + 3600000;
+        }
         await saveGmailTokens(
           tokens.user_email,
           credentials.access_token,
