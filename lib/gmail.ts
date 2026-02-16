@@ -25,10 +25,10 @@ export async function getGmailClient(tokens: GmailTokens) {
         if (credentials.expiry_date) {
           if (typeof credentials.expiry_date === 'number') {
             newExpiry = credentials.expiry_date;
-          } else if (credentials.expiry_date instanceof Date) {
-            newExpiry = credentials.expiry_date.getTime();
           } else {
-            newExpiry = Date.now() + 3600000;
+            // TypeScript type narrowing issue - use type assertion
+            const expiryDate = credentials.expiry_date as Date;
+            newExpiry = expiryDate.getTime();
           }
         } else {
           newExpiry = Date.now() + 3600000;
