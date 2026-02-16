@@ -25,8 +25,10 @@ export async function getGmailClient(tokens: GmailTokens) {
         if (credentials.expiry_date) {
           if (typeof credentials.expiry_date === 'number') {
             newExpiry = credentials.expiry_date;
-          } else {
+          } else if (credentials.expiry_date instanceof Date) {
             newExpiry = credentials.expiry_date.getTime();
+          } else {
+            newExpiry = Date.now() + 3600000;
           }
         } else {
           newExpiry = Date.now() + 3600000;
