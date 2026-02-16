@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import type { AgentResponse, DraftResponse, LookupResult } from '@/types';
+import type { AgentResponse, DraftResponse, LookupResult, EmailMode, EmailTag } from '@/types';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
