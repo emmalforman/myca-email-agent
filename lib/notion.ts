@@ -69,7 +69,7 @@ export async function logEmailToNotion(
       },
       children: [
         {
-          object: 'block',
+          object: 'block' as const,
           type: 'heading_2',
           heading_2: {
             rich_text: [
@@ -82,7 +82,7 @@ export async function logEmailToNotion(
           },
         },
         {
-          object: 'block',
+          object: 'block' as const,
           type: 'paragraph',
           paragraph: {
             rich_text: [
@@ -95,7 +95,7 @@ export async function logEmailToNotion(
           },
         },
         {
-          object: 'block',
+          object: 'block' as const,
           type: 'heading_2',
           heading_2: {
             rich_text: [
@@ -108,7 +108,7 @@ export async function logEmailToNotion(
           },
         },
         {
-          object: 'block',
+          object: 'block' as const,
           type: 'paragraph',
           paragraph: {
             rich_text: [
@@ -123,7 +123,7 @@ export async function logEmailToNotion(
         ...(selectedPerson
           ? [
               {
-                object: 'block',
+                object: 'block' as const,
                 type: 'heading_2',
                 heading_2: {
                   rich_text: [
@@ -136,7 +136,7 @@ export async function logEmailToNotion(
                 },
               },
               {
-                object: 'block',
+                object: 'block' as const,
                 type: 'paragraph',
                 paragraph: {
                   rich_text: [
@@ -153,7 +153,7 @@ export async function logEmailToNotion(
         ...(questions && questions.length > 0
           ? [
               {
-                object: 'block',
+                object: 'block' as const,
                 type: 'heading_2',
                 heading_2: {
                   rich_text: [
