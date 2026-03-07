@@ -11,6 +11,8 @@ export async function GET() {
   const scopes = [
     'https://www.googleapis.com/auth/gmail.compose',
     'https://www.googleapis.com/auth/gmail.modify',
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
   ];
 
   const url = oauth2Client.generateAuthUrl({
