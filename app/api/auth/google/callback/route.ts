@@ -2,18 +2,24 @@ import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import { saveGmailTokens } from '@/lib/supabase';
 
+function getBaseUrl(): string {
+  const url = process.env.NEXT_PUBLIC_APP_URL || '';
+  return url.replace(/\/$/, ''); // no trailing slash
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
+  const baseUrl = getBaseUrl();
 
   if (!code) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}?error=no_code`);
+    return NextResponse.redirect(`${baseUrl}?error=no_code`);
   }
 
   const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/google/callback`
+    `${baseUrl}/api/auth/google/callback`
   );
 
   try {
@@ -45,11 +51,13 @@ export async function GET(request: Request) {
       expiryDate
     );
 
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}?connected=true`);
+    return NextResponse.redirect(`${baseUrl}?connected=true`);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('OAuth callback error:', message, error);
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}?error=auth_failed`);
+    // Surface a short safe reason so user can see what failed (avoid leaking secrets)
+    const safeReason = encodeURIComponent(message.slice(0, 80).replace(/[^a-zA-Z0-9 _-]/g, ''));
+    return NextResponse.redirect(`${baseUrl}?error=auth_failed&reason=${safeReason}`);
   }
 }
 
