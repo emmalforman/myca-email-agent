@@ -29,11 +29,11 @@ export async function GET(request: Request) {
       throw new Error('Failed to get tokens');
     }
 
-    // Get user email
+    // Get user email from Gmail API (we only have Gmail scopes, not userinfo)
     oauth2Client.setCredentials(tokens);
-    const oauth2 = google.oauth2({ version: 'v2', auth: oauth2Client });
-    const userInfo = await oauth2.userinfo.get();
-    const userEmail = userInfo.data.email!;
+    const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+    const profile = await gmail.users.getProfile({ userId: 'me' });
+    const userEmail = profile.data.emailAddress!;
 
     // Save tokens (ensure expiry_date is a number for Supabase BIGINT)
     let expiryDate: number;
