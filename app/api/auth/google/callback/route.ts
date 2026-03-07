@@ -29,8 +29,15 @@ export async function GET(request: Request) {
     const userInfo = await oauth2.userinfo.get();
     const userEmail = userInfo.data.email!;
 
-    // Save tokens
-    const expiryDate = tokens.expiry_date || Date.now() + 3600000; // Default 1 hour
+    // Save tokens (ensure expiry_date is a number for Supabase BIGINT)
+    let expiryDate: number;
+    if (typeof tokens.expiry_date === 'number') {
+      expiryDate = tokens.expiry_date;
+    } else if (tokens.expiry_date && Object.prototype.toString.call(tokens.expiry_date) === '[object Date]') {
+      expiryDate = (tokens.expiry_date as Date).getTime();
+    } else {
+      expiryDate = Date.now() + 3600000;
+    }
     await saveGmailTokens(
       userEmail,
       tokens.access_token,
@@ -40,7 +47,8 @@ export async function GET(request: Request) {
 
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}?connected=true`);
   } catch (error) {
-    console.error('OAuth error:', error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('OAuth callback error:', message, error);
     return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}?error=auth_failed`);
   }
 }
